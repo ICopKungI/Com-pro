@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 
-float money; //เงินหลัก
-float *add_money = &money;
-float start;
-float more = 0; //เงิน+รวม
-float less = 0; //เงิน-รวม
+double money; //เงินหลัก
+double *add_money = &money;
+double start;
+double more = 0; //เงิน+รวม
+double less = 0; //เงิน-รวม
 int order(); //รับคำสั่งรายการ
 int make_order1(); //ทำรายการ
 int in_money(); //+
@@ -13,7 +13,7 @@ int out_money(); //-
 int times = 0;
 struct plan //ตาราง
 {
-    float num_money;
+    double num_money;
     char note[300];
 } plan[100];
 int table(); //ตารางรายการ
@@ -24,20 +24,20 @@ int main() // สรุปผลรวม
 {
     printf("Wellcome\n");
     printf("PLS Enter Money\n");
-    scanf("%f", &money);
+    scanf("%lf", &money);
     start = money;
     order();
-    printf("เงินเริ่มต้น %.2f บาท\n", start);
-    printf("เพิ่ม : +%.2f บาท\n", more);
-    printf("ลด : -%.2f บาท\n", less);
-    float ans_mol = more - less; //ส่วนต่างรับ จ่าย
+    printf("เงินเริ่มต้น %.2lf บาท\n", start);
+    printf("เพิ่ม : +%.2lf บาท\n", more);
+    printf("ลด : -%.2lf บาท\n", less);
+    double ans_mol = more - less; //ส่วนต่างรับ จ่าย
     if (ans_mol >= 0)
     {
-        printf("ส่วนต่าง : +%.2f\n", ans_mol);
+        printf("ส่วนต่าง : +%.2lf\n", ans_mol);
     }
     else if (ans_mol < 0)
     {
-        printf("ส่วนต่าง : %.2f\n", ans_mol);
+        printf("ส่วนต่าง : %.2lf\n", ans_mol);
     }
     printf("THX YOU\n");
     return 0;
@@ -45,7 +45,7 @@ int main() // สรุปผลรวม
 
 int order()
 {
-    printf("\nเงิน : %.2f บาท\n", *add_money);
+    printf("\nเงิน : %.2lf บาท\n", *add_money);
     printf("Order 1 : ทำรายการ\nOrder 2 : เสร็จสิ้น\nOrder 3 : ประวัติรายการ\n");
     char order_1[2];
     printf("EnterOrder : ");
@@ -63,7 +63,7 @@ int order()
     else if (order_1[0] == '2')
     {
         printf("เสร็จสิ้น\n");
-        printf("\nคงเหลือ : %.2f บาท\n", *add_money);
+        printf("\nคงเหลือ : %.2lf บาท\n", *add_money);
     }
     else if (order_1[0] == '3')
     {
@@ -78,7 +78,7 @@ int order()
 }
 
 int make_order1(){
-    printf("\nเงิน : %.2f บาท\n", *add_money);
+    printf("\nเงิน : %.2lf บาท\n", *add_money);
     char order_1[2];
     printf("Order 1 : รายการ รับเงิน\nOrder 2 : รายการ จ่ายเงิน\nOrder 3 : ย้อนกลับ\nOrder 4 : เสร็จสิ้น\n");
     printf("EnterOrder : ");
@@ -106,7 +106,7 @@ int make_order1(){
     else if (order_1[0] == '4')
     {
         printf("เสร็จสิ้น\n");
-        printf("\nคงเหลือ : %.2f บาท\n", *add_money);
+        printf("\nคงเหลือ : %.2lf บาท\n", *add_money);
     }
     else{
         printf("Error\nTry Again\n");
@@ -117,13 +117,13 @@ int make_order1(){
 
 int in_money(){
     times += 1;
-    printf("\nเงิน : %.2f บาท\n", *add_money);
+    printf("\nเงิน : %.2lf บาท\n", *add_money);
     printf("Enter Money : +");
-    float num; // ตัวแปรเฉพาะในนี้(เงินที่จะ+เพิ่ม)
-    scanf("%f", &num);
+    double num; // ตัวแปรเฉพาะในนี้(เงินที่จะ+เพิ่ม)
+    scanf("%lf", &num);
     money += num;
     more += num;
-    printf("คงเหลือ : %.2f บาท\n", *add_money);
+    printf("คงเหลือ : %.2lf บาท\n", *add_money);
     plan[times-1].num_money = num;
     check();
     make_order1();
@@ -132,13 +132,13 @@ int in_money(){
 
 int out_money(){
     times += 1;
-    printf("\nเงิน : %.2f บาท\n", *add_money);
+    printf("\nเงิน : %.2lf บาท\n", *add_money);
     printf("Enter Money : -");
-    float num; // ตัวแปรเฉพาะในนี้(เงินที่จะ-อีก)
-    scanf("%f", &num);
+    double num; // ตัวแปรเฉพาะในนี้(เงินที่จะ-อีก)
+    scanf("%lf", &num);
     money -= num;
     less += num;
-    printf("คงเหลือ : %.2f บาท\n", *add_money);
+    printf("คงเหลือ : %.2lf บาท\n", *add_money);
     plan[times-1].num_money = -num;
     check();
     make_order1();
@@ -146,18 +146,18 @@ int out_money(){
 }
 
 int table(){
-    printf("\nเงินเริ่มต้น %.2f บาท\n", start);
+    printf("\nเงินเริ่มต้น %.2lf บาท\n", start);
     if (times > 0)
     {
         for (int i = 0; i < times; i++)
         {
-            printf("รายการ %d : %.2f บาท หมายเหตุ %s\n", i+1, plan[i].num_money, plan[i].note);
+            printf("รายการ %d : %.2lf บาท หมายเหตุ %s\n", i+1, plan[i].num_money, plan[i].note);
         }
     }
     else {
         printf("ไม่มีประวัติการทำรายการ\n");
     }
-    printf("คงเหลือ : %.2f บาท\n", *add_money);
+    printf("คงเหลือ : %.2lf บาท\n", *add_money);
     order();
     return 0;
 }
