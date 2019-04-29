@@ -22,11 +22,33 @@ int check(); //ตรวจสอบหมายเหตุ
 // เริ่ม function
 int main() // สรุปผลรวม
 {
-    printf("Wellcome\n");
-    printf("PLS Enter Money\n");
-    scanf("%lf", &money);
+    FILE *fp_tr, *fp_r, *fp_ta, *fp_a;
+    fp_tr = fopen("stage.txt","r"); //ตรวจสอบการใช้งานครั้งแรก
+    fp_ta = fopen("stage.txt","a");//เขียนบันทึกการLogin
+    fp_r = fopen("booking.txt", "r");
+    fp_a = fopen("booking.txt", "a");
+    char test[100]; //ตัวทดสอบไฟล์ว่าง
+    while(fscanf(fp_tr,"%s", test) != EOF)
+    {
+        if (strcmp(test,"False") == 0) //รับค่าเงินครั้งแรก
+        {
+            fprintf(fp_ta, "True");
+            printf("\n==============================\nFirst Times Login\n==============================\n\n");
+            printf("Wellcome\n");
+            printf("PLS Enter Money\n");
+            scanf("%lf", &money);
+        }
+        else//เริ่มรับค่าครั้งที่2+
+        {
+            char notuse1[20], notuse2[20];
+            while(fscanf(fp_r,"%s %s %lf", notuse1, notuse2, &money) != EOF)
+            {
+            }
+        }
+    }
     start = money;
     order();
+    printf("\n==============================\n");
     printf("เงินเริ่มต้น %.2lf บาท\n", start);
     printf("เพิ่ม : +%.2lf บาท\n", more);
     printf("ลด : -%.2lf บาท\n", less);
@@ -40,12 +62,31 @@ int main() // สรุปผลรวม
         printf("ส่วนต่าง : %.2lf\n", ans_mol);
     }
     printf("THX YOU\n");
+    //เก็บค่า
+
+    fprintf(fp_a, "เงินเริ่มต้น %.2lf บาท\n", start);
+    if (times > 0)
+    {
+        for (int i = 0; i < times; i++)
+        {
+            fprintf(fp_a, "รายการ %d : %.2lf บาท หมายเหตุ %s\n", i+1, plan[i].num_money, plan[i].note);
+        }
+    }
+    else {
+        fprintf(fp_a, "ไม่มีประวัติการทำรายการ\n");
+    }
+    fprintf(fp_a, "คงเหลือ : %.2lf บาท\n", *add_money);
+    fclose(fp_a);
+    fclose(fp_r);
+    fclose(fp_ta);
+    fclose(fp_tr);
     return 0;
 }
 
 int order()
 {
-    printf("\nเงิน : %.2lf บาท\n", *add_money);
+    printf("\n==============================\n");
+    printf("เงิน : %.2lf บาท\n", *add_money);
     printf("Order 1 : ทำรายการ\nOrder 2 : เสร็จสิ้น\nOrder 3 : ประวัติรายการ\n");
     char order_1[2];
     printf("EnterOrder : ");
@@ -78,7 +119,8 @@ int order()
 }
 
 int make_order1(){
-    printf("\nเงิน : %.2lf บาท\n", *add_money);
+    printf("\n==============================\n");
+    printf("เงิน : %.2lf บาท\n", *add_money);
     char order_1[2];
     printf("Order 1 : รายการ รับเงิน\nOrder 2 : รายการ จ่ายเงิน\nOrder 3 : ย้อนกลับ\nOrder 4 : เสร็จสิ้น\n");
     printf("EnterOrder : ");
@@ -146,7 +188,8 @@ int out_money(){
 }
 
 int table(){
-    printf("\nเงินเริ่มต้น %.2lf บาท\n", start);
+    printf("\n==============================\n");
+    printf("เงินเริ่มต้น %.2lf บาท\n", start);
     if (times > 0)
     {
         for (int i = 0; i < times; i++)
@@ -158,6 +201,7 @@ int table(){
         printf("ไม่มีประวัติการทำรายการ\n");
     }
     printf("คงเหลือ : %.2lf บาท\n", *add_money);
+    printf("==============================\n");
     order();
     return 0;
 }
