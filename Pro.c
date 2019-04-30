@@ -94,7 +94,10 @@ int main() // สรุปผลรวม
         {
             printf("ส่วนต่าง : %.2lf\n", ans_mol);
         }
-        printf("THX YOU\n");
+        printf("==============================\n");
+        printf("สามารถดูประวัติการทำรายการแบบเต็มได้ที่ booking.txt\n");
+        printf("==============================\n");
+        printf("^-^ THX YOU! ^-^\n");
 
         //เก็บค่า
 
@@ -103,7 +106,14 @@ int main() // สรุปผลรวม
         {
             for (int i = 0; i < times; i++)
             {
-                fprintf(fp_a, "รายการ %d : %.2lf บาท หมายเหตุ %s\n", i+1, plan[i].num_money, plan[i].note);
+                if (plan[i].num_money < 0)
+                {
+                    fprintf(fp_a, "รายการ %d : %.2lf บาท หมายเหตุ %s\n", i+1, plan[i].num_money, plan[i].note);
+                }
+                else
+                {
+                    fprintf(fp_a, "รายการ %d : +%.2lf บาท หมายเหตุ %s\n", i+1, plan[i].num_money, plan[i].note);
+                }
             }
         }
         else {
@@ -299,7 +309,15 @@ int table(){
     {
         for (int i = 0; i < times; i++)
         {
-            printf("รายการ %d : %.2lf บาท หมายเหตุ %s\n", i+1, plan[i].num_money, plan[i].note);
+            if (plan[i].num_money < 0)
+            {
+                printf("รายการ %d : %.2lf บาท หมายเหตุ %s\n", i+1, plan[i].num_money, plan[i].note);
+            }
+            else
+            {
+                printf("รายการ %d : +%.2lf บาท หมายเหตุ %s\n", i+1, plan[i].num_money, plan[i].note);
+            }
+
         }
     }
     else {
