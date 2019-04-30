@@ -94,6 +94,10 @@ int main() // สรุปผลรวม
             fprintf(fp_a, "การทำรายการ : ไม่มีประวัติการทำรายการ\n");
         }
         fprintf(fp_a, "คงเหลือ : %.2lf บาท\n", *add_money);
+        fprintf(fp_a, "==============================\n");
+        fp_tw = fopen("stage.txt","w");
+        fclose(fp_tw);
+        fprintf(fp_ta, "True");
         fprintf(fp_ta, "\n%lf", money);
         fclose(fp_a);
         fclose(fp_r);
@@ -158,6 +162,7 @@ int order()
         else if (sure[0] == 'F' || sure[0] == 'f')
         {
             printf("ยกเลิกการ Reset\n");
+            order();
         }
         else{
             printf("Error\nTry Again\n");
