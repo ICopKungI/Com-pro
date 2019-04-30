@@ -8,12 +8,17 @@
     **************
     หรือใช้คำสั่ง Reset
     **************
+
+    หมายเหตุ
+    โปรแกรมจะไม่ทำการบันทึกประวัติการทำรายการหากปิดโปรแกรมโดยไม่ผ่าน คำสั่ง : เสร็จสิ้น
+    แต่โปรแกรมจะบันทึกค่าเงินล่าสุดไว้
+
 */
 
-int new = 1;
+int new = 1; //ตัวcheckการResetค่า
 double money; //เงินหลัก
 double *add_money = &money;
-double start;
+double start; //เงินเริ่ม(สำรอง)
 double more = 0; //เงิน+รวม
 double less = 0; //เงิน-รวม
 int order(); //รับคำสั่งรายการ
@@ -29,28 +34,34 @@ struct plan //ตาราง
 int table(); //ตารางรายการ
 int check(); //ตรวจสอบหมายเหตุ
 
+
+
 // เริ่ม function
 int main() // สรุปผลรวม
 {
+
     FILE *fp_tr, *fp_r, *fp_ta, *fp_a, *fp_tw;
     fp_tr = fopen("stage.txt","r"); //ตรวจสอบการใช้งานครั้งแรก
     fp_ta = fopen("stage.txt","a");//เขียนบันทึกการLogin
     fp_r = fopen("booking.txt", "r");
     fp_a = fopen("booking.txt", "a");
+
     char test[100]; //ตัวทดสอบไฟล์ว่าง
     while(fscanf(fp_tr,"%s", test) != EOF)
     {
         if (strcmp(test,"False") == 0) //รับค่าเงินครั้งแรก
         {
-            fp_tw = fopen("stage.txt","w");
-            fclose(fp_tw);
-            fprintf(fp_ta, "True");
             printf("\n==============================\n");
             printf("      First Times Login         ");
-            printf("\n==============================\n\n");
-            printf("Wellcome\n");
+            printf("\n==============================\n");
+            printf("\n==============================\n");
+            printf("           Wellcome");
+            printf("\n==============================\n");
             printf("PLS Enter Money\n");
             scanf("%lf", &money);
+            fp_tw = fopen("stage.txt","w"); /* Reset stage.txt */
+            fclose(fp_tw);
+            fprintf(fp_ta, "True");
         }
         else//เริ่มรับค่าครั้งที่2+
         {
@@ -80,6 +91,7 @@ int main() // สรุปผลรวม
             printf("ส่วนต่าง : %.2lf\n", ans_mol);
         }
         printf("THX YOU\n");
+
         //เก็บค่า
 
         fprintf(fp_a, "เงินเริ่มต้น %.2lf บาท\n", start);
@@ -95,10 +107,10 @@ int main() // สรุปผลรวม
         }
         fprintf(fp_a, "คงเหลือ : %.2lf บาท\n", *add_money);
         fprintf(fp_a, "==============================\n");
-        fp_tw = fopen("stage.txt","w");
+        fp_tw = fopen("stage.txt","w"); /* การsaveค่าเงิน */
         fclose(fp_tw);
         fprintf(fp_ta, "True");
-        fprintf(fp_ta, "\n%lf", money);
+        fprintf(fp_ta, "\n%lf", money); /*  */
         fclose(fp_a);
         fclose(fp_r);
         fclose(fp_ta);
@@ -215,7 +227,14 @@ int make_order1(){
     return 0;
 }
 
-int in_money(){
+int in_money(){ //รับเงิน
+
+    FILE *fp_tr, *fp_r, *fp_ta, *fp_a, *fp_tw;
+    fp_tr = fopen("stage.txt","r"); //ตรวจสอบการใช้งานครั้งแรก
+    fp_ta = fopen("stage.txt","a");//เขียนบันทึกการLogin
+    fp_r = fopen("booking.txt", "r");
+    fp_a = fopen("booking.txt", "a");
+
     times += 1;
     printf("\nเงิน : %.2lf บาท\n", *add_money);
     printf("Enter Money : +");
@@ -224,13 +243,28 @@ int in_money(){
     money += num;
     more += num;
     printf("คงเหลือ : %.2lf บาท\n", *add_money);
+    fp_tw = fopen("stage.txt","w"); /* การsaveค่าเงิน */
+    fclose(fp_tw);
+    fprintf(fp_ta, "True");
+    fprintf(fp_ta, "\n%lf", money); /*  */
+    fclose(fp_a);
+    fclose(fp_r);
+    fclose(fp_ta);
+    fclose(fp_tr);
     plan[times-1].num_money = num;
     check();
     make_order1();
     return 0;
 }
 
-int out_money(){
+int out_money(){ //จ่านเงิน
+
+    FILE *fp_tr, *fp_r, *fp_ta, *fp_a, *fp_tw;
+    fp_tr = fopen("stage.txt","r"); //ตรวจสอบการใช้งานครั้งแรก
+    fp_ta = fopen("stage.txt","a");//เขียนบันทึกการLogin
+    fp_r = fopen("booking.txt", "r");
+    fp_a = fopen("booking.txt", "a");
+
     times += 1;
     printf("\nเงิน : %.2lf บาท\n", *add_money);
     printf("Enter Money : -");
@@ -239,6 +273,14 @@ int out_money(){
     money -= num;
     less += num;
     printf("คงเหลือ : %.2lf บาท\n", *add_money);
+    fp_tw = fopen("stage.txt","w"); /* การsaveค่าเงิน */
+    fclose(fp_tw);
+    fprintf(fp_ta, "True");
+    fprintf(fp_ta, "\n%lf", money); /*  */
+    fclose(fp_a);
+    fclose(fp_r);
+    fclose(fp_ta);
+    fclose(fp_tr);
     plan[times-1].num_money = -num;
     check();
     make_order1();
@@ -266,6 +308,7 @@ int table(){
 
 int check(){
     printf("เพิ่มหมายเหตุ หรือไม่ : เพิ่ม(T) ไม่(F)\n");
+    printf("EnterOrder : ");
     char check_t[2];
     scanf("%s", &check_t);
     if (strlen(check_t) != 1)
