@@ -2,11 +2,15 @@
 #include <string.h>
 
 /*
-    การResetค่าเป็นการเริ่มต้นใหม่ 
+    การResetค่าเป็นการเริ่มต้นใหม่
     1)ลบข้อมูลในไฟล์ booking.txt ทั้งหมด (ไฟล์ว่าง)
     2)ลบข้อมูลในไฟล์ stage.txt ทั้งหมดแล้วให้ใส่ข้อมูลใหม่ว่า False (เหลือแต่คำว่า False *เหลือเพียง 1บรรทัด*)
+    **************
+    หรือใช้คำสั่ง Reset
+    **************
 */
 
+int new = 1;
 double money; //เงินหลัก
 double *add_money = &money;
 double start;
@@ -28,7 +32,7 @@ int check(); //ตรวจสอบหมายเหตุ
 // เริ่ม function
 int main() // สรุปผลรวม
 {
-    FILE *fp_tr, *fp_r, *fp_ta, *fp_a;
+    FILE *fp_tr, *fp_r, *fp_ta, *fp_a, *fp_tw;
     fp_tr = fopen("stage.txt","r"); //ตรวจสอบการใช้งานครั้งแรก
     fp_ta = fopen("stage.txt","a");//เขียนบันทึกการLogin
     fp_r = fopen("booking.txt", "r");
@@ -38,6 +42,8 @@ int main() // สรุปผลรวม
     {
         if (strcmp(test,"False") == 0) //รับค่าเงินครั้งแรก
         {
+            fp_tw = fopen("stage.txt","w");
+            fclose(fp_tw);
             fprintf(fp_ta, "True");
             printf("\n==============================\n");
             printf("      First Times Login         ");
@@ -58,39 +64,47 @@ int main() // สรุปผลรวม
     }
     start = money;
     order();
-    printf("\n==============================\n");
-    printf("เงินเริ่มต้น %.2lf บาท\n", start);
-    printf("เพิ่ม : +%.2lf บาท\n", more);
-    printf("ลด : -%.2lf บาท\n", less);
-    double ans_mol = more - less; //ส่วนต่างรับ จ่าย
-    if (ans_mol >= 0)
+    if (new == 1)
     {
-        printf("ส่วนต่าง : +%.2lf\n", ans_mol);
-    }
-    else if (ans_mol < 0)
-    {
-        printf("ส่วนต่าง : %.2lf\n", ans_mol);
-    }
-    printf("THX YOU\n");
-    //เก็บค่า
-
-    fprintf(fp_a, "เงินเริ่มต้น %.2lf บาท\n", start);
-    if (times > 0)
-    {
-        for (int i = 0; i < times; i++)
+        printf("\n==============================\n");
+        printf("เงินเริ่มต้น %.2lf บาท\n", start);
+        printf("เพิ่ม : +%.2lf บาท\n", more);
+        printf("ลด : -%.2lf บาท\n", less);
+        double ans_mol = more - less; //ส่วนต่างรับ จ่าย
+        if (ans_mol >= 0)
         {
-            fprintf(fp_a, "รายการ %d : %.2lf บาท หมายเหตุ %s\n", i+1, plan[i].num_money, plan[i].note);
+            printf("ส่วนต่าง : +%.2lf\n", ans_mol);
         }
+        else if (ans_mol < 0)
+        {
+            printf("ส่วนต่าง : %.2lf\n", ans_mol);
+        }
+        printf("THX YOU\n");
+        //เก็บค่า
+
+        fprintf(fp_a, "เงินเริ่มต้น %.2lf บาท\n", start);
+        if (times > 0)
+        {
+            for (int i = 0; i < times; i++)
+            {
+                fprintf(fp_a, "รายการ %d : %.2lf บาท หมายเหตุ %s\n", i+1, plan[i].num_money, plan[i].note);
+            }
+        }
+        else {
+            fprintf(fp_a, "การทำรายการ : ไม่มีประวัติการทำรายการ\n");
+        }
+        fprintf(fp_a, "คงเหลือ : %.2lf บาท\n", *add_money);
+        fprintf(fp_ta, "\n%lf", money);
+        fclose(fp_a);
+        fclose(fp_r);
+        fclose(fp_ta);
+        fclose(fp_tr);
     }
-    else {
-        fprintf(fp_a, "การทำรายการ : ไม่มีประวัติการทำรายการ\n");
+    else{
+        printf("\n==============================\n");
+        printf("\n        Reset Sytem\n");
+        printf("\n==============================\n");
     }
-    fprintf(fp_a, "คงเหลือ : %.2lf บาท\n", *add_money);
-    fprintf(fp_ta, "\n%lf", money);
-    fclose(fp_a);
-    fclose(fp_r);
-    fclose(fp_ta);
-    fclose(fp_tr);
     return 0;
 }
 
@@ -98,7 +112,7 @@ int order()
 {
     printf("\n==============================\n");
     printf("เงิน : %.2lf บาท\n", *add_money);
-    printf("Order 1 : ทำรายการ\nOrder 2 : เสร็จสิ้น\nOrder 3 : ประวัติรายการ\n");
+    printf("Order 1 : ทำรายการ\nOrder 2 : เสร็จสิ้น\nOrder 3 : ประวัติรายการ\nOrder 9 : Reset Sytem\n");
     char order_1[2];
     printf("EnterOrder : ");
     scanf("%s", &order_1);
@@ -121,6 +135,34 @@ int order()
     {
         printf("ประวัติรายการ\n");
         table();
+    }
+    else if (order_1[0] == '9') //Reset Every thing
+    {
+        printf("\n==============================\n");
+        printf("Reset การทำรายการ\n");
+        char sure[2];
+        printf("Order T : ยืนยัน\n");
+        printf("Order F : ยกเลิก\n");
+        printf("EnterOrder : ");
+        scanf("%s", &sure);
+        if (sure[0] == 'T' || sure[0] == 't')
+        {
+            FILE *reset;
+            reset = fopen("stage.txt","w");
+            fclose(reset);
+            fprintf(fopen("stage.txt","a"), "False");
+            reset = fopen("booking.txt","w");
+            fclose(reset);
+            new = 0;
+        }
+        else if (sure[0] == 'F' || sure[0] == 'f')
+        {
+            printf("ยกเลิกการ Reset\n");
+        }
+        else{
+            printf("Error\nTry Again\n");
+            order();
+        }
     }
     else{
         printf("Error\nTry Again\n");
