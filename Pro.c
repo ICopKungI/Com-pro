@@ -42,7 +42,7 @@ int main() // สรุปผลรวม
 
     FILE *fp_tr, *fp_r, *fp_ta, *fp_a, *fp_tw;
     fp_tr = fopen("stage.txt","r"); //ตรวจสอบการใช้งานครั้งแรก
-    fp_ta = fopen("stage.txt","a");//เขียนบันทึกการLogin
+    fp_ta = fopen("stage.txt","a");//เขียนบันทึกเงินคงเหลือ
     fp_r = fopen("booking.txt", "r");
     fp_a = fopen("booking.txt", "a");
 
@@ -111,6 +111,7 @@ int main() // สรุปผลรวม
         }
         fprintf(fp_a, "คงเหลือ : %.2lf บาท\n", *add_money);
         fprintf(fp_a, "==============================\n");
+        fp_ta = fopen("stage.txt","a");//เขียนบันทึกเงินคงเหลือ
         fp_tw = fopen("stage.txt","w"); /* การsaveค่าเงิน */
         fclose(fp_tw);
         fprintf(fp_ta, "True");
@@ -235,7 +236,7 @@ int in_money(){ //รับเงิน
 
     FILE *fp_tr, *fp_r, *fp_ta, *fp_a, *fp_tw;
     fp_tr = fopen("stage.txt","r"); //ตรวจสอบการใช้งานครั้งแรก
-    fp_ta = fopen("stage.txt","a");//เขียนบันทึกการLogin
+    fp_ta = fopen("stage.txt","a");//เขียนบันทึกเงินคงเหลือ
     fp_r = fopen("booking.txt", "r");
     fp_a = fopen("booking.txt", "a");
 
@@ -265,7 +266,7 @@ int out_money(){ //จ่านเงิน
 
     FILE *fp_tr, *fp_r, *fp_ta, *fp_a, *fp_tw;
     fp_tr = fopen("stage.txt","r"); //ตรวจสอบการใช้งานครั้งแรก
-    fp_ta = fopen("stage.txt","a");//เขียนบันทึกการLogin
+    fp_ta = fopen("stage.txt","a");//เขียนบันทึกเงินคงเหลือ
     fp_r = fopen("booking.txt", "r");
     fp_a = fopen("booking.txt", "a");
 
