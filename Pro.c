@@ -1,6 +1,12 @@
 #include <stdio.h>
 #include <string.h>
 
+/*
+    การResetค่าเป็นการเริ่มต้นใหม่ 
+    1)ลบข้อมูลในไฟล์ booking.txt ทั้งหมด (ไฟล์ว่าง)
+    2)ลบข้อมูลในไฟล์ stage.txt ทั้งหมดแล้วให้ใส่ข้อมูลใหม่ว่า False (เหลือแต่คำว่า False *เหลือเพียง 1บรรทัด*)
+*/
+
 double money; //เงินหลัก
 double *add_money = &money;
 double start;
@@ -33,16 +39,20 @@ int main() // สรุปผลรวม
         if (strcmp(test,"False") == 0) //รับค่าเงินครั้งแรก
         {
             fprintf(fp_ta, "True");
-            printf("\n==============================\nFirst Times Login\n==============================\n\n");
+            printf("\n==============================\n");
+            printf("      First Times Login         ");
+            printf("\n==============================\n\n");
             printf("Wellcome\n");
             printf("PLS Enter Money\n");
             scanf("%lf", &money);
         }
         else//เริ่มรับค่าครั้งที่2+
         {
-            char notuse1[20], notuse2[20];
-            while(fscanf(fp_r,"%s %s %lf", notuse1, notuse2, &money) != EOF)
+            while(fscanf(fp_tr,"%lf", &money) != EOF)
             {
+                printf("\n==============================\n");
+                printf("        Wellcome Back!          ");
+                printf("\n==============================\n\n");
             }
         }
     }
@@ -73,9 +83,10 @@ int main() // สรุปผลรวม
         }
     }
     else {
-        fprintf(fp_a, "ไม่มีประวัติการทำรายการ\n");
+        fprintf(fp_a, "การทำรายการ : ไม่มีประวัติการทำรายการ\n");
     }
     fprintf(fp_a, "คงเหลือ : %.2lf บาท\n", *add_money);
+    fprintf(fp_ta, "\n%lf", money);
     fclose(fp_a);
     fclose(fp_r);
     fclose(fp_ta);
