@@ -62,6 +62,9 @@ int main() // สรุปผลรวม
             fp_tw = fopen("stage.txt","w"); /* Reset stage.txt */
             fclose(fp_tw);
             fprintf(fp_ta, "True");
+            fprintf(fp_ta, "\n%lf", money); /*  */
+            fclose(fp_ta);
+
         }
         else//เริ่มรับค่าครั้งที่2+
         {
@@ -75,6 +78,7 @@ int main() // สรุปผลรวม
     }
     start = money;
     order();
+
     if (new == 1)
     {
         printf("\n==============================\n");
