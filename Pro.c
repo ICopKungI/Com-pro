@@ -110,9 +110,13 @@ int main() // สรุปผลรวม
                 {
                     fprintf(fp_a, "รายการ %d : %.2lf บาท หมายเหตุ %s\n", i+1, plan[i].num_money, plan[i].note);
                 }
-                else
+                else if (plan[i].num_money > 0)
                 {
                     fprintf(fp_a, "รายการ %d : +%.2lf บาท หมายเหตุ %s\n", i+1, plan[i].num_money, plan[i].note);
+                }
+                else
+                {
+                    fprintf(fp_a, "รายการ %d : 0.00 บาท หมายเหตุ %s\n", i+1, plan[i].note);
                 }
             }
         }
@@ -296,7 +300,14 @@ int out_money(){ //จ่านเงิน
     fclose(fp_r);
     fclose(fp_ta);
     fclose(fp_tr);
-    plan[times-1].num_money = -num;
+    if (num == 0)
+    {
+        plan[times-1].num_money = 0;
+    }
+    else
+    {
+        plan[times-1].num_money = -num;
+    }
     check();
     make_order1();
     return 0;
@@ -313,9 +324,13 @@ int table(){
             {
                 printf("รายการ %d : %.2lf บาท หมายเหตุ %s\n", i+1, plan[i].num_money, plan[i].note);
             }
-            else
+            else if (plan[i].num_money > 0)
             {
                 printf("รายการ %d : +%.2lf บาท หมายเหตุ %s\n", i+1, plan[i].num_money, plan[i].note);
+            }
+            else
+            {
+                printf("รายการ %d : 0.00 บาท หมายเหตุ %s\n", i+1, plan[i].note);
             }
 
         }
